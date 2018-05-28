@@ -85,7 +85,7 @@ uint8_t Dir1 = 0, Dir2 = 0, Dir3 = 0, Dir4 = 0, Dir5 = 0, Dir6 = 0;
 uint32_t PWMHoldTime1 = 7000, PWMHoldTime2 = 7000, PWMHoldTime3 = 7000, PWMHoldTime4 = 7000,
     PWMHoldTime5 = 7000, PWMHoldTime6 = 7000;
 uint32_t iTime;
-// CRC ¸ßÎ»Î»×Ö½ÚÖµ±í
+// CRC é«˜ä½ä½å­—èŠ‚å€¼è¡¨
 static uint8_t auchCRCHi[] =
   { 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41,
       0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40,
@@ -109,7 +109,7 @@ static uint8_t auchCRCHi[] =
       0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
       0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41,
       0x00, 0xC1, 0x81, 0x40 };
-// CRC µÍÎ»×Ö½ÚÖµ±í
+// CRC ä½ä½å­—èŠ‚å€¼è¡¨
 static uint8_t auchCRCLo[] =
   { 0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06, 0x07, 0xC7,
       0x05, 0xC5, 0xC4, 0x04, 0xCC, 0x0C, 0x0D, 0xCD, 0x0F, 0xCF, 0xCE, 0x0E,
@@ -199,7 +199,7 @@ main (void)
   MX_USART1_UART_Init ();
   MX_USART2_UART_Init ();
   /* USER CODE BEGIN 2 */
-  /* »ñÈ¡ÄÚ´æ²½¾àÏ¸·Ö */
+  /* è·å–å†…å­˜æ­¥è·ç»†åˆ† */
   PWM1Step = 10;
   PWM2Step = 10;
   PWM3Step = 10;
@@ -359,10 +359,10 @@ OutPWM6 (uint8_t Step, uint8_t Dir)
   PWM6_EN(0);
 }
 /**
- * º¯Êı¹¦ÄÜ: ´®¿ÚÖĞ¶Ï»Øµ÷º¯Êı
- * ÊäÈë²ÎÊı: UartHandle£º´®¿ÚÍâÉèÉè±¸¾ä±ú
- * ·µ »Ø Öµ: ÎŞ
- * Ëµ    Ã÷: ÎŞ
+ * å‡½æ•°åŠŸèƒ½: ä¸²å£ä¸­æ–­å›è°ƒå‡½æ•°
+ * è¾“å…¥å‚æ•°: UartHandleï¼šä¸²å£å¤–è®¾è®¾å¤‡å¥æŸ„
+ * è¿” å› å€¼: æ— 
+ * è¯´    æ˜: æ— 
  */
 void
 CMDProcess (void)
@@ -399,30 +399,30 @@ CMDProcess (void)
     }
 }
 /**
- * º¯Êı¹¦ÄÜ: ´®¿ÚÖĞ¶Ï»Øµ÷º¯Êı
- * ÊäÈë²ÎÊı: UartHandle£º´®¿ÚÍâÉèÉè±¸¾ä±ú
- * ·µ »Ø Öµ: ÎŞ
- * Ëµ    Ã÷: ÎŞ
+ * å‡½æ•°åŠŸèƒ½: ä¸²å£ä¸­æ–­å›è°ƒå‡½æ•°
+ * è¾“å…¥å‚æ•°: UartHandleï¼šä¸²å£å¤–è®¾è®¾å¤‡å¥æŸ„
+ * è¿” å› å€¼: æ— 
+ * è¯´    æ˜: æ— 
  */
 unsigned short
 CRC16 (uint8_t *puchMsg, unsigned short usDataLen)
 {
-  uint8_t uchCRCHi = 0xFF; /* ¸ßCRC×Ö½Ú³õÊ¼»¯ */
-  uint8_t uchCRCLo = 0xFF; /* µÍCRC ×Ö½Ú³õÊ¼»¯ */
-  unsigned uIndex; /* CRCÑ­»·ÖĞµÄË÷Òı */
-  while (usDataLen--) /* ´«ÊäÏûÏ¢»º³åÇø */
+  uint8_t uchCRCHi = 0xFF; /* é«˜CRCå­—èŠ‚åˆå§‹åŒ– */
+  uint8_t uchCRCLo = 0xFF; /* ä½CRC å­—èŠ‚åˆå§‹åŒ– */
+  unsigned uIndex; /* CRCå¾ªç¯ä¸­çš„ç´¢å¼• */
+  while (usDataLen--) /* ä¼ è¾“æ¶ˆæ¯ç¼“å†²åŒº */
     {
-      uIndex = uchCRCHi ^ *puchMsg++; /* ¼ÆËãCRC */
+      uIndex = uchCRCHi ^ *puchMsg++; /* è®¡ç®—CRC */
       uchCRCHi = uchCRCLo ^ auchCRCHi[uIndex];
       uchCRCLo = auchCRCLo[uIndex];
     }
   return (uchCRCHi << 8 | uchCRCLo);
 }
 /**
- * º¯Êı¹¦ÄÜ: ´®¿ÚÖĞ¶Ï»Øµ÷º¯Êı
- * ÊäÈë²ÎÊı: UartHandle£º´®¿ÚÍâÉèÉè±¸¾ä±ú
- * ·µ »Ø Öµ: ÎŞ
- * Ëµ    Ã÷: ÎŞ
+ * å‡½æ•°åŠŸèƒ½: ä¸²å£ä¸­æ–­å›è°ƒå‡½æ•°
+ * è¾“å…¥å‚æ•°: UartHandleï¼šä¸²å£å¤–è®¾è®¾å¤‡å¥æŸ„
+ * è¿” å› å€¼: æ— 
+ * è¯´    æ˜: æ— 
  */
 void
 HAL_UART_RxCpltCallback (UART_HandleTypeDef* uartHandle)
