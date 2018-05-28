@@ -1,0 +1,25 @@
+--cpu Cortex-M3
+"usartto6pwm\stm32f1xx_hal_gpio.o"
+"usartto6pwm\stm32f1xx_hal_pwr.o"
+"usartto6pwm\stm32f1xx_hal_cortex.o"
+"usartto6pwm\stm32f1xx_hal_gpio_ex.o"
+"usartto6pwm\stm32f1xx_hal_rcc_ex.o"
+"usartto6pwm\stm32f1xx_hal_uart.o"
+"usartto6pwm\stm32f1xx_hal_tim.o"
+"usartto6pwm\stm32f1xx_hal_flash_ex.o"
+"usartto6pwm\stm32f1xx_hal_dma.o"
+"usartto6pwm\stm32f1xx_hal_tim_ex.o"
+"usartto6pwm\stm32f1xx_hal.o"
+"usartto6pwm\stm32f1xx_hal_rcc.o"
+"usartto6pwm\stm32f1xx_hal_flash.o"
+"usartto6pwm\startup_stm32f103xe.o"
+"usartto6pwm\system_stm32f1xx.o"
+"usartto6pwm\usart.o"
+"usartto6pwm\gpio.o"
+"usartto6pwm\stm32f1xx_it.o"
+"usartto6pwm\main.o"
+"usartto6pwm\stm32f1xx_hal_msp.o"
+--library_type=microlib --strict --scatter "UsartTo6PWM\UsartTo6PWM.sct"
+--diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "UsartTo6PWM.map" -o UsartTo6PWM\UsartTo6PWM.axf
