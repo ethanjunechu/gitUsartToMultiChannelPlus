@@ -48,6 +48,9 @@
 
 #MacOS
 *.DS_Store
+
+#eclipse
+#.settings.xml
 .tmp_versions/
 modules.order
 Module.symvers
