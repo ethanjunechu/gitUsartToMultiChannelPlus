@@ -188,4 +188,5 @@
 			<resource resourceType="PROJECT" workspacePath="UsartTo6PWM"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>
