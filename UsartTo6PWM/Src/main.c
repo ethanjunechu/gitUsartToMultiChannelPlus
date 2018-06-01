@@ -42,7 +42,6 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-/* test shortcut */
 #include <string.h>
 /* USER CODE END Includes */
 
