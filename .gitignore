@@ -50,7 +50,7 @@
 *.DS_Store
 
 #eclipse
-#.settings.xml
+*.settings
 .tmp_versions/
 modules.order
 Module.symvers
