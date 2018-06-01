@@ -42,7 +42,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-/* 测试github */
+/* 测试 eclipse github */
 #include <string.h>
 /* USER CODE END Includes */
 
