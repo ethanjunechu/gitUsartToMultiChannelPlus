@@ -74,6 +74,8 @@
 #define PWM6_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_RESET))
 #define PWM6_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET))
 #define PWM6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET))
+
+#define TransferLED_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET))
 /* 最大命令数 */
 #define MAX_CMD_SIZE 1000
 /* 串口接收缓存 */
@@ -81,9 +83,9 @@ uint8_t RxBuffer[8];
 /* 命令缓存 */
 uint8_t CMDBuffer[MAX_CMD_SIZE][3];
 /* 已接收的命令数 */
-uint8_t CMDRevNum = 0;
+uint32_t CMDRevNum = 0;
 /* 当前命令位置 */
-uint8_t CMDRunNum = 0;
+uint32_t CMDRunNum = 0;
 /* 6路PWM倍数 */
 uint8_t PWM1Step = 10, PWM2Step = 10, PWM3Step = 10, PWM4Step = 10, PWM5Step =
 		10, PWM6Step = 10;
@@ -94,6 +96,7 @@ uint32_t PWMHoldTime1 = 7000, PWMHoldTime2 = 7000, PWMHoldTime3 = 7000,
 		PWMHoldTime4 = 7000, PWMHoldTime5 = 7000, PWMHoldTime6 = 7000;
 /* 脉宽时间临时计数 */
 uint32_t iTime;
+
 // CRC 高位位字节值表
 static uint8_t auchCRCHi[] = { 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
 		0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
@@ -204,6 +207,7 @@ int main(void) {
 	MX_USART1_UART_Init();
 	MX_USART2_UART_Init();
 	/* USER CODE BEGIN 2 */
+	HAL_Delay(1000);
 	/* 获取内存步距细分 */
 	PWM1Step = 10;
 	PWM2Step = 10;
@@ -211,8 +215,11 @@ int main(void) {
 	PWM4Step = 10;
 	PWM5Step = 10;
 	PWM6Step = 10;
+
+	TransferLED_OUT(0);
 	/* 初始化串口接收 */
-	HAL_UART_Receive_IT(&huart1, RxBuffer, 7);
+	HAL_UART_Receive_IT(&huart2, RxBuffer, 7);
+
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -416,6 +423,7 @@ unsigned short CRC16(uint8_t *puchMsg, unsigned short usDataLen) {
  * 说    明: 无
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
+	TransferLED_OUT(1);
 	/* 判断起始符&结束符 */
 	if (RxBuffer[0] == 0xFF && RxBuffer[6] == 0xEE) {
 		unsigned short CRCCal = CRC16(&RxBuffer[1], 3);
@@ -436,6 +444,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
 				CMDRevNum = 0;
 				CMDRunNum = 0;
 			}
+
+			HAL_UART_Transmit(&huart2, RxBuffer, 7, 0xFFFF);
+
 			/* 清除接收缓存 */
 			uint8_t i;
 			for (i = 0; i < 7; i++) {
@@ -443,8 +454,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
 			}
 		}
 	}
+	TransferLED_OUT(0);
 	/* 重启串口接收缓存 */
-	HAL_UART_Receive_IT(&huart1, RxBuffer, 7);
+	HAL_UART_Receive_IT(&huart2, RxBuffer, 7);
 }
 /* USER CODE END 4 */
 
