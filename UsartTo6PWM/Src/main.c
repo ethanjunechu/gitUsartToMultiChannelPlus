@@ -92,7 +92,7 @@ uint8_t PWM1Step = 10, PWM2Step = 10, PWM3Step = 10, PWM4Step = 10, PWM5Step =
 /* 6路PWM方向 */
 uint8_t Dir1 = 0, Dir2 = 0, Dir3 = 0, Dir4 = 0, Dir5 = 0, Dir6 = 0;
 /* 6路PWM脉宽时间 */
-uint32_t PWMHoldTime1 = 7000, PWMHoldTime2 = 7000, PWMHoldTime3 = 7000,
+uint32_t PWMHoldTime1 = 15, PWMHoldTime2 = 15, PWMHoldTime3 = 7000,
 		PWMHoldTime4 = 7000, PWMHoldTime5 = 7000, PWMHoldTime6 = 7000;
 /* 脉宽时间临时计数 */
 uint32_t iTime;
