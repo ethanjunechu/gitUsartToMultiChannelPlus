@@ -51,31 +51,37 @@
 /* Private variables ---------------------------------------------------------*/
 /* 定义6路GPIO模拟PWM输出 */
 /* 顺序对应STM32_IO板QB1-QB18 */
-#define PWM1_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET))
+#define PWM1_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET))
 #define PWM1_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET))
-#define PWM1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET))
+#define PWM1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET))
 
-#define PWM2_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET))
+#define PWM2_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET))
 #define PWM2_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET))
-#define PWM2_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET))
+#define PWM2_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET))
 
-#define PWM3_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET))
+#define PWM3_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET))
 #define PWM3_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_SET))
-#define PWM3_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET))
+#define PWM3_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_SET))
 
-#define PWM4_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_RESET))
+#define PWM4_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET))
 #define PWM4_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_14, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_14, GPIO_PIN_SET))
-#define PWM4_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_13, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_13, GPIO_PIN_RESET))
+#define PWM4_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_13, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_13, GPIO_PIN_SET))
 
-#define PWM5_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_12, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_12, GPIO_PIN_RESET))
+#define PWM5_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_12, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_12, GPIO_PIN_SET))
 #define PWM5_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_PIN_SET))
-#define PWM5_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_10, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_10, GPIO_PIN_RESET))
+#define PWM5_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_10, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_10, GPIO_PIN_SET))
 
-#define PWM6_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_RESET))
+#define PWM6_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET))
 #define PWM6_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET))
-#define PWM6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET))
+#define PWM6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET))
 
-#define TransferLED_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET))
+#define TransferLED1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET))
+#define TransferLED2_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET))
+#define TransferLED3_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET))
+#define TransferLED4_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET))
+#define TransferLED5_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET))
+#define TransferLED6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET))
+
 /* 最大命令数 */
 #define MAX_CMD_SIZE 1000
 /* 串口接收缓存 */
@@ -215,8 +221,12 @@ int main(void) {
 	PWM4Step = 10;
 	PWM5Step = 10;
 	PWM6Step = 10;
-
-	TransferLED_OUT(0);
+	TransferLED1_OUT(0);
+	TransferLED2_OUT(0);
+	TransferLED3_OUT(0);
+	TransferLED4_OUT(0);
+	TransferLED5_OUT(0);
+	TransferLED6_OUT(0);
 	/* 初始化串口接收 */
 	HAL_UART_Receive_IT(&huart2, RxBuffer, 7);
 
@@ -289,9 +299,11 @@ void OutPWM1(uint8_t Step, uint8_t Dir) {
 	PWM1_EN(1);
 	for (; Step > 0; Step--) {
 		PWM1_OUT(1);
+		TransferLED1_OUT(1);
 		for (iTime = 0; iTime < PWMHoldTime1; iTime++)
 			;
 		PWM1_OUT(0);
+		TransferLED1_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime1; iTime++)
 			;
 	}
@@ -302,9 +314,11 @@ void OutPWM2(uint8_t Step, uint8_t Dir) {
 	PWM2_EN(1);
 	for (; Step > 0; Step--) {
 		PWM2_OUT(1);
+		TransferLED2_OUT(1);
 		for (iTime = 0; iTime < PWMHoldTime2; iTime++)
 			;
 		PWM2_OUT(0);
+		TransferLED2_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime2; iTime++)
 			;
 	}
@@ -315,9 +329,11 @@ void OutPWM3(uint8_t Step, uint8_t Dir) {
 	PWM3_EN(1);
 	for (; Step > 0; Step--) {
 		PWM3_OUT(1);
+		TransferLED3_OUT(1);
 		for (iTime = 0; iTime < PWMHoldTime3; iTime++)
 			;
 		PWM3_OUT(0);
+		TransferLED3_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime3; iTime++)
 			;
 	}
@@ -328,9 +344,11 @@ void OutPWM4(uint8_t Step, uint8_t Dir) {
 	PWM4_EN(1);
 	for (; Step > 0; Step--) {
 		PWM4_OUT(1);
+		TransferLED4_OUT(1);
 		for (iTime = 0; iTime < PWMHoldTime4; iTime++)
 			;
 		PWM4_OUT(0);
+		TransferLED4_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime4; iTime++)
 			;
 	}
@@ -341,9 +359,11 @@ void OutPWM5(uint8_t Step, uint8_t Dir) {
 	PWM5_EN(1);
 	for (; Step > 0; Step--) {
 		PWM5_OUT(1);
+		TransferLED5_OUT(1);
 		for (iTime = 0; iTime < PWMHoldTime5; iTime++)
 			;
 		PWM5_OUT(0);
+		TransferLED5_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime5; iTime++)
 			;
 	}
@@ -354,9 +374,11 @@ void OutPWM6(uint8_t Step, uint8_t Dir) {
 	PWM6_EN(1);
 	for (; Step > 0; Step--) {
 		PWM6_OUT(1);
+		TransferLED6_OUT(1);
 		for (iTime = 0; iTime < PWMHoldTime6; iTime++)
 			;
 		PWM6_OUT(0);
+		TransferLED6_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime6; iTime++)
 			;
 	}
@@ -423,7 +445,6 @@ unsigned short CRC16(uint8_t *puchMsg, unsigned short usDataLen) {
  * 说    明: 无
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
-	TransferLED_OUT(1);
 	/* 判断起始符&结束符 */
 	if (RxBuffer[0] == 0xFF && RxBuffer[6] == 0xEE) {
 		unsigned short CRCCal = CRC16(&RxBuffer[1], 3);
@@ -454,7 +475,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
 			}
 		}
 	}
-	TransferLED_OUT(0);
 	/* 重启串口接收缓存 */
 	HAL_UART_Receive_IT(&huart2, RxBuffer, 7);
 }
