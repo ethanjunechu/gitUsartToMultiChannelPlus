@@ -51,28 +51,28 @@
 /* Private variables ---------------------------------------------------------*/
 /* 定义6路GPIO模拟PWM输出 */
 /* 顺序对应STM32_IO板QB1-QB18 */
-#define PWM1_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET))
-#define PWM1_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET))
+#define PWM1_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET))
+#define PWM1_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET))
 #define PWM1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET))
 
-#define PWM2_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET))
-#define PWM2_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET))
+#define PWM2_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET))
+#define PWM2_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET))
 #define PWM2_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET))
 
-#define PWM3_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET))
-#define PWM3_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_SET))
+#define PWM3_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10, GPIO_PIN_RESET))
+#define PWM3_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET))
 #define PWM3_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_SET))
 
-#define PWM4_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET))
-#define PWM4_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_14, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_14, GPIO_PIN_SET))
+#define PWM4_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_RESET))
+#define PWM4_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_14, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_14, GPIO_PIN_RESET))
 #define PWM4_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_13, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_13, GPIO_PIN_SET))
 
-#define PWM5_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_12, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_12, GPIO_PIN_SET))
-#define PWM5_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_PIN_SET))
+#define PWM5_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_12, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_12, GPIO_PIN_RESET))
+#define PWM5_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_PIN_RESET))
 #define PWM5_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_10, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_10, GPIO_PIN_SET))
 
-#define PWM6_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET))
-#define PWM6_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET))
+#define PWM6_DIR(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_RESET))
+#define PWM6_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET))
 #define PWM6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET))
 
 #define TransferLED1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET))
@@ -81,13 +81,13 @@
 #define TransferLED4_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET))
 #define TransferLED5_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET))
 #define TransferLED6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET))
-
+#define TransferRELAY1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET))
 /* 最大命令数 */
 #define MAX_CMD_SIZE 1000
 /* 串口接收缓存 */
 uint8_t RxBuffer[8];
 /* 命令缓存 */
-uint8_t CMDBuffer[MAX_CMD_SIZE][3];
+uint8_t CMDBuffer[MAX_CMD_SIZE][4];
 /* 已接收的命令数 */
 uint32_t CMDRevNum = 0;
 /* 当前命令位置 */
@@ -98,7 +98,7 @@ uint8_t PWM1Step = 10, PWM2Step = 10, PWM3Step = 10, PWM4Step = 10, PWM5Step =
 /* 6路PWM方向 */
 uint8_t Dir1 = 0, Dir2 = 0, Dir3 = 0, Dir4 = 0, Dir5 = 0, Dir6 = 0;
 /* 6路PWM脉宽时间 */
-uint32_t PWMHoldTime1 = 15, PWMHoldTime2 = 15, PWMHoldTime3 = 7000,
+uint32_t PWMHoldTime1 = 10000, PWMHoldTime2 = 7000, PWMHoldTime3 = 7000,
 		PWMHoldTime4 = 7000, PWMHoldTime5 = 7000, PWMHoldTime6 = 7000;
 /* 脉宽时间临时计数 */
 uint32_t iTime;
@@ -149,6 +149,28 @@ static uint8_t auchCRCLo[] = { 0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2,
 		0x88, 0x48, 0x49, 0x89, 0x4B, 0x8B, 0x8A, 0x4A, 0x4E, 0x8E, 0x8F, 0x4F,
 		0x8D, 0x4D, 0x4C, 0x8C, 0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86,
 		0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80, 0x40 };
+//步进电机S曲线加速查表法
+static uint32_t period[202] = { 168750, 167622, 167564, 167504, 167441, 167374,
+		167304, 167231, 167153, 167072, 166987, 166898, 166804, 166705, 166602,
+		166493, 166379, 166259, 166134, 166002, 165863, 165718, 165565, 165405,
+		165237, 165061, 164876, 164683, 164479, 164266, 164043, 163809, 163563,
+		163306, 163036, 162753, 162457, 162147, 161823, 161483, 161127, 160755,
+		160365, 159958, 159532, 159086, 158621, 158134, 157625, 157095, 156540,
+		155962, 155358, 154729, 154072, 153388, 152676, 151934, 151162, 150358,
+		149523, 148655, 147753, 146816, 145844, 144837, 143792, 142710, 141590,
+		140431, 139234, 137996, 136719, 135402, 134044, 132646, 131207, 129728,
+		128208, 126649, 125050, 123412, 121735, 120022, 118271, 116486, 114666,
+		112813, 110928, 109014, 107072, 105104, 103111, 101096, 99061, 97009,
+		94941, 92860, 90769, 88670, 86566, 84459, 82353, 80248, 78149, 76058,
+		73978, 71910, 69857, 67822, 65808, 63815, 61847, 59904, 57990, 56106,
+		54253, 52433, 50648, 48897, 47184, 45507, 43869, 42270, 40711, 39191,
+		37712, 36273, 34875, 33517, 32199, 30922, 29685, 28487, 27329, 26209,
+		25127, 24082, 23074, 22103, 21166, 20264, 19396, 18560, 17757, 16985,
+		16243, 15530, 14846, 14190, 13561, 12957, 12378, 11824, 11293, 10785,
+		10298, 9833, 9387, 8961, 8553, 8164, 7792, 7436, 7096, 6771, 6461, 6165,
+		5883, 5613, 5356, 5110, 4876, 4653, 4439, 4236, 4042, 3858, 3681, 3513,
+		3353, 3201, 3056, 2917, 2785, 2659, 2540, 2426, 2317, 2213, 2115, 2021,
+		1932, 1846, 1765, 1688, 1615, 1545, 1478, 1415, 1354, 1297 };
 
 /* USER CODE END PV */
 
@@ -165,17 +187,17 @@ CMDProcess(void);
 void
 HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle);
 void
-OutPWM1(uint8_t Step, uint8_t Dir);
+OutPWM1(uint32_t Step, uint8_t Dir);
 void
-OutPWM2(uint8_t Step, uint8_t Dir);
+OutPWM2(uint32_t Step, uint8_t Dir);
 void
-OutPWM3(uint8_t Step, uint8_t Dir);
+OutPWM3(uint32_t Step, uint8_t Dir);
 void
-OutPWM4(uint8_t Step, uint8_t Dir);
+OutPWM4(uint32_t Step, uint8_t Dir);
 void
-OutPWM5(uint8_t Step, uint8_t Dir);
+OutPWM5(uint32_t Step, uint8_t Dir);
 void
-OutPWM6(uint8_t Step, uint8_t Dir);
+OutPWM6(uint32_t Step, uint8_t Dir);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -214,6 +236,12 @@ int main(void) {
 	MX_USART2_UART_Init();
 	/* USER CODE BEGIN 2 */
 	HAL_Delay(1000);
+	PWM1_OUT(0);
+	PWM2_OUT(0);
+	PWM3_OUT(0);
+	PWM4_OUT(0);
+	PWM5_OUT(0);
+	PWM6_OUT(0);
 	/* 获取内存步距细分 */
 	PWM1Step = 10;
 	PWM2Step = 10;
@@ -228,8 +256,7 @@ int main(void) {
 	TransferLED5_OUT(0);
 	TransferLED6_OUT(0);
 	/* 初始化串口接收 */
-	HAL_UART_Receive_IT(&huart2, RxBuffer, 7);
-
+	HAL_UART_Receive_IT(&huart2, RxBuffer, 8);
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -294,95 +321,155 @@ void SystemClock_Config(void) {
 
 /* USER CODE BEGIN 4 */
 /* 6路PWM输出函数 */
-void OutPWM1(uint8_t Step, uint8_t Dir) {
+void OutPWM1(uint32_t Step, uint8_t Dir) {
+	uint32_t PWMHoldTime = period[0] / 50;
+	uint32_t OldStep = Step;
 	PWM1_DIR(Dir);
-	PWM1_EN(1);
+	PWM1_EN(0);
 	for (; Step > 0; Step--) {
+		//S加速
+		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
+			PWMHoldTime = period[OldStep - Step] / 50;
+		}
+		//S减速
+		if (Step <= 200 && (Step < (OldStep / 2))) {
+			PWMHoldTime = period[Step] / 50;
+		}
 		PWM1_OUT(1);
 		TransferLED1_OUT(1);
-		for (iTime = 0; iTime < PWMHoldTime1; iTime++)
+		for (iTime = 0; iTime < 4; iTime++)
 			;
 		PWM1_OUT(0);
 		TransferLED1_OUT(0);
-		for (iTime = 0; iTime < PWMHoldTime1; iTime++)
+		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
 	}
-	PWM1_EN(0);
+	PWM1_EN(1);
 }
-void OutPWM2(uint8_t Step, uint8_t Dir) {
+void OutPWM2(uint32_t Step, uint8_t Dir) {
+	uint32_t PWMHoldTime = period[0] / 50;
+	uint32_t OldStep = Step;
 	PWM2_DIR(Dir);
-	PWM2_EN(1);
+	PWM2_EN(0);
 	for (; Step > 0; Step--) {
+		//S加速
+		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
+			PWMHoldTime = period[OldStep - Step] / 50;
+		}
+		//S减速
+		if (Step <= 200 && (Step < (OldStep / 2))) {
+			PWMHoldTime = period[Step] / 50;
+		}
 		PWM2_OUT(1);
 		TransferLED2_OUT(1);
-		for (iTime = 0; iTime < PWMHoldTime2; iTime++)
+		for (iTime = 0; iTime < 4; iTime++)
 			;
 		PWM2_OUT(0);
 		TransferLED2_OUT(0);
-		for (iTime = 0; iTime < PWMHoldTime2; iTime++)
+		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
 	}
-	PWM2_EN(0);
+	PWM2_EN(1);
 }
-void OutPWM3(uint8_t Step, uint8_t Dir) {
+void OutPWM3(uint32_t Step, uint8_t Dir) {
+	uint32_t PWMHoldTime = period[0] / 50;
+	uint32_t OldStep = Step;
 	PWM3_DIR(Dir);
-	PWM3_EN(1);
+	PWM3_EN(0);
 	for (; Step > 0; Step--) {
+		//S加速
+		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
+			PWMHoldTime = period[OldStep - Step] / 50;
+		}
+		//S减速
+		if (Step <= 200 && (Step < (OldStep / 2))) {
+			PWMHoldTime = period[Step] / 50;
+		}
 		PWM3_OUT(1);
 		TransferLED3_OUT(1);
-		for (iTime = 0; iTime < PWMHoldTime3; iTime++)
+		for (iTime = 0; iTime < 4; iTime++)
 			;
 		PWM3_OUT(0);
 		TransferLED3_OUT(0);
-		for (iTime = 0; iTime < PWMHoldTime3; iTime++)
+		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
 	}
-	PWM3_EN(0);
+	PWM3_EN(1);
 }
-void OutPWM4(uint8_t Step, uint8_t Dir) {
+void OutPWM4(uint32_t Step, uint8_t Dir) {
+	uint32_t PWMHoldTime = period[0] / 50;
+	uint32_t OldStep = Step;
 	PWM4_DIR(Dir);
-	PWM4_EN(1);
+	PWM4_EN(0);
 	for (; Step > 0; Step--) {
+		//S加速
+		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
+			PWMHoldTime = period[OldStep - Step] / 50;
+		}
+		//S减速
+		if (Step <= 200 && (Step < (OldStep / 2))) {
+			PWMHoldTime = period[Step] / 50;
+		}
 		PWM4_OUT(1);
 		TransferLED4_OUT(1);
-		for (iTime = 0; iTime < PWMHoldTime4; iTime++)
+		for (iTime = 0; iTime < 4; iTime++)
 			;
 		PWM4_OUT(0);
 		TransferLED4_OUT(0);
-		for (iTime = 0; iTime < PWMHoldTime4; iTime++)
+		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
 	}
-	PWM4_EN(0);
+	PWM4_EN(1);
 }
-void OutPWM5(uint8_t Step, uint8_t Dir) {
+void OutPWM5(uint32_t Step, uint8_t Dir) {
+	uint32_t PWMHoldTime = period[0] / 50;
+	uint32_t OldStep = Step;
 	PWM5_DIR(Dir);
-	PWM5_EN(1);
+	PWM5_EN(0);
 	for (; Step > 0; Step--) {
+		//S加速
+		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
+			PWMHoldTime = period[OldStep - Step] / 50;
+		}
+		//S减速
+		if (Step <= 200 && (Step < (OldStep / 2))) {
+			PWMHoldTime = period[Step] / 50;
+		}
 		PWM5_OUT(1);
 		TransferLED5_OUT(1);
-		for (iTime = 0; iTime < PWMHoldTime5; iTime++)
+		for (iTime = 0; iTime < 4; iTime++)
 			;
 		PWM5_OUT(0);
 		TransferLED5_OUT(0);
-		for (iTime = 0; iTime < PWMHoldTime5; iTime++)
+		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
 	}
-	PWM1_EN(0);
+	PWM5_EN(1);
 }
-void OutPWM6(uint8_t Step, uint8_t Dir) {
+void OutPWM6(uint32_t Step, uint8_t Dir) {
+	uint32_t PWMHoldTime = period[0] / 50;
+	uint32_t OldStep = Step;
 	PWM6_DIR(Dir);
-	PWM6_EN(1);
+	PWM6_EN(0);
 	for (; Step > 0; Step--) {
+		//S加速
+		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
+			PWMHoldTime = period[OldStep - Step] / 50;
+		}
+		//S减速
+		if (Step <= 200 && (Step < (OldStep / 2))) {
+			PWMHoldTime = period[Step] / 50;
+		}
 		PWM6_OUT(1);
 		TransferLED6_OUT(1);
-		for (iTime = 0; iTime < PWMHoldTime6; iTime++)
+		for (iTime = 0; iTime < 4; iTime++)
 			;
 		PWM6_OUT(0);
 		TransferLED6_OUT(0);
-		for (iTime = 0; iTime < PWMHoldTime6; iTime++)
+		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
 	}
-	PWM6_EN(0);
+	PWM6_EN(1);
 }
 /**
  * 函数功能: 命令处理函数
@@ -394,27 +481,34 @@ void CMDProcess(void) {
 	if (CMDBuffer[CMDRunNum][0] != 0) {
 		switch (CMDBuffer[CMDRunNum][0]) {
 		case 1:
-			OutPWM1(CMDBuffer[CMDRunNum][1], CMDBuffer[CMDRunNum][2]);
+			OutPWM1((CMDBuffer[CMDRunNum][1] << 8) + CMDBuffer[CMDRunNum][2],
+					CMDBuffer[CMDRunNum][3]);
 			break;
 		case 2:
-			OutPWM2(CMDBuffer[CMDRunNum][1], CMDBuffer[CMDRunNum][2]);
+			OutPWM2((CMDBuffer[CMDRunNum][1] << 8) + CMDBuffer[CMDRunNum][2],
+					CMDBuffer[CMDRunNum][3]);
 			break;
 		case 3:
-			OutPWM3(CMDBuffer[CMDRunNum][1], CMDBuffer[CMDRunNum][2]);
+			OutPWM3((CMDBuffer[CMDRunNum][1] << 8) + CMDBuffer[CMDRunNum][2],
+					CMDBuffer[CMDRunNum][3]);
 			break;
 		case 4:
-			OutPWM4(CMDBuffer[CMDRunNum][1], CMDBuffer[CMDRunNum][2]);
+			OutPWM4((CMDBuffer[CMDRunNum][1] << 8) + CMDBuffer[CMDRunNum][2],
+					CMDBuffer[CMDRunNum][3]);
 			break;
 		case 5:
-			OutPWM5(CMDBuffer[CMDRunNum][1], CMDBuffer[CMDRunNum][2]);
+			OutPWM5((CMDBuffer[CMDRunNum][1] << 8) + CMDBuffer[CMDRunNum][2],
+					CMDBuffer[CMDRunNum][3]);
 			break;
 		case 6:
-			OutPWM6(CMDBuffer[CMDRunNum][1], CMDBuffer[CMDRunNum][2]);
+			OutPWM6((CMDBuffer[CMDRunNum][1] << 8) + CMDBuffer[CMDRunNum][2],
+					CMDBuffer[CMDRunNum][3]);
 			break;
 		}
 		CMDBuffer[CMDRunNum][0] = 0;
 		CMDBuffer[CMDRunNum][1] = 0;
 		CMDBuffer[CMDRunNum][2] = 0;
+		CMDBuffer[CMDRunNum][3] = 0;
 		CMDRunNum++;
 		if (CMDRunNum == MAX_CMD_SIZE)
 			CMDRunNum = 0;
@@ -446,11 +540,11 @@ unsigned short CRC16(uint8_t *puchMsg, unsigned short usDataLen) {
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
 	/* 判断起始符&结束符 */
-	if (RxBuffer[0] == 0xFF && RxBuffer[6] == 0xEE) {
-		unsigned short CRCCal = CRC16(&RxBuffer[1], 3);
+	if (RxBuffer[0] == 0xFF && RxBuffer[7] == 0xEE) {
+		unsigned short CRCCal = CRC16(&RxBuffer[1], 4);
 		/* 判断CRC校验 */
-		if ((RxBuffer[4] == ((CRCCal & 0xFF00) >> 8))
-				&& (RxBuffer[5] == (CRCCal & 0xFF))) {
+		if ((RxBuffer[5] == ((CRCCal & 0xFF00) >> 8))
+				&& (RxBuffer[6] == (CRCCal & 0xFF))) {
 			/* 命令缓存达到最大值, 重新循环 */
 			if (CMDRevNum > MAX_CMD_SIZE)
 				CMDRevNum = 0;
@@ -458,6 +552,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
 			CMDBuffer[CMDRevNum][0] = RxBuffer[1];
 			CMDBuffer[CMDRevNum][1] = RxBuffer[2];
 			CMDBuffer[CMDRevNum][2] = RxBuffer[3];
+			CMDBuffer[CMDRevNum][3] = RxBuffer[4];
 			CMDRevNum++;
 			/* 处理特殊命令: 暂未定义 */
 			if (RxBuffer[1] == 99) {
@@ -466,17 +561,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
 				CMDRunNum = 0;
 			}
 
-			HAL_UART_Transmit(&huart2, RxBuffer, 7, 0xFFFF);
+			HAL_UART_Transmit(&huart2, RxBuffer, 8, 0xFFFF);
 
 			/* 清除接收缓存 */
-			uint8_t i;
-			for (i = 0; i < 7; i++) {
-				RxBuffer[i] = 0;
-			}
+			memset(RxBuffer, 0, 8);
 		}
 	}
 	/* 重启串口接收缓存 */
-	HAL_UART_Receive_IT(&huart2, RxBuffer, 7);
+	HAL_UART_Receive_IT(&huart2, RxBuffer, 8);
 }
 /* USER CODE END 4 */
 
