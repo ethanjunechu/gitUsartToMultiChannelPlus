@@ -75,17 +75,38 @@
 #define PWM6_EN(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET))
 #define PWM6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET) : HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET))
 
-#define TransferLED1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET))
-#define TransferLED2_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET))
-#define TransferLED3_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET))
-#define TransferLED4_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET))
-#define TransferLED5_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET))
-#define TransferLED6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET))
+//#define TransferLED1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET))
+//#define TransferLED2_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET))
+//#define TransferLED3_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET))
+//#define TransferLED4_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET))
+//#define TransferLED5_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET))
+//#define TransferLED6_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET))
+#define limitYMin HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3)
+#define limitYMax HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5)
+#define limitZMin HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4)
+#define limitZMax HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6)
+
 #define TransferRELAY1_OUT(x)  (x == 1 ? HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET) : HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET))
 /* 最大命令数 */
-#define MAX_CMD_SIZE 1000
+#define MAX_CMD_SIZE 10000
+
+/* 状态-工作 */
+#define WORKING 2
+/* 状态-回零 */
+#define FINDZERO 3
+/* 状态-手动 */
+#define MANUAL 1
+/* 状态-手动 */
+#define EMCSTOP 0
+
+/* 当前工作状态 */
+uint8_t currentStatus = 1;
+/* 上一工作状态 */
+uint8_t lastStatus = 1;
 /* 串口接收缓存 */
-uint8_t RxBuffer[8];
+uint8_t RxBuffer[6];
+/* 急停发送缓存 */
+uint8_t EMCSTOPBuffer[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 /* 命令缓存 */
 uint8_t CMDBuffer[MAX_CMD_SIZE][4];
 /* 已接收的命令数 */
@@ -150,41 +171,79 @@ static uint8_t auchCRCLo[] = { 0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2,
 		0x8D, 0x4D, 0x4C, 0x8C, 0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86,
 		0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80, 0x40 };
 //步进电机S曲线加速查表法
-static uint32_t period[202] = { 8438, 8390, 8388, 8386, 8383, 8380, 8377, 8374,
-		8371, 8368, 8364, 8360, 8356, 8352, 8348, 8343, 8339, 8334, 8328, 8323,
-		8317, 8311, 8305, 8298, 8291, 8284, 8276, 8268, 8259, 8250, 8241, 8231,
-		8221, 8210, 8199, 8187, 8175, 8162, 8149, 8134, 8120, 8104, 8088, 8071,
-		8053, 8034, 8015, 7995, 7974, 7951, 7928, 7904, 7879, 7853, 7825, 7797,
-		7767, 7736, 7704, 7670, 7636, 7599, 7562, 7523, 7482, 7440, 7397, 7351,
-		7305, 7256, 7206, 7155, 7102, 7047, 6990, 6932, 6872, 6810, 6747, 6682,
-		6615, 6547, 6477, 6405, 6332, 6258, 6182, 6104, 6026, 5946, 5865, 5783,
-		5700, 5616, 5531, 5445, 5359, 5272, 5185, 5098, 5010, 4922, 4834, 4746,
-		4659, 4571, 4485, 4398, 4313, 4228, 4144, 4061, 3979, 3898, 3818, 3739,
-		3662, 3586, 3512, 3439, 3367, 3297, 3229, 3162, 3097, 3034, 2972, 2912,
-		2854, 2797, 2742, 2689, 2637, 2587, 2539, 2492, 2447, 2404, 2362, 2321,
-		2282, 2244, 2208, 2173, 2140, 2108, 2077, 2047, 2018, 1991, 1965, 1940,
-		1915, 1892, 1870, 1849, 1829, 1809, 1791, 1773, 1756, 1740, 1724, 1709,
-		1695, 1682, 1669, 1656, 1645, 1633, 1623, 1612, 1603, 1593, 1584, 1576,
-		1568, 1560, 1553, 1546, 1539, 1533, 1527, 1521, 1515, 1510, 1505, 1500,
-		1496, 1492, 1487, 1484, 1480, 1476, 1473, 1470, 1467, 1464, 1461, 1458,
-		1456, 1453 };
-static uint32_t period1[202] = { 8438, 8384, 8381, 8378, 8375, 8372, 8369, 8365,
-		8362, 8358, 8354, 8349, 8345, 8340, 8335, 8330, 8325, 8319, 8313, 8307,
-		8300, 8293, 8286, 8278, 8270, 8262, 8253, 8244, 8234, 8224, 8214, 8203,
-		8191, 8179, 8166, 8152, 8138, 8124, 8108, 8092, 8075, 8057, 8039, 8019,
-		7999, 7978, 7956, 7933, 7909, 7883, 7857, 7829, 7801, 7771, 7740, 7707,
-		7673, 7638, 7601, 7563, 7523, 7482, 7439, 7395, 7348, 7300, 7251, 7199,
-		7146, 7091, 7034, 6975, 6915, 6852, 6787, 6721, 6652, 6582, 6510, 6436,
-		6360, 6282, 6202, 6121, 6037, 5952, 5866, 5778, 5688, 5597, 5505, 5411,
-		5317, 5221, 5124, 5026, 4928, 4829, 4730, 4630, 4530, 4430, 4330, 4229,
-		4130, 4030, 3931, 3833, 3735, 3639, 3543, 3448, 3355, 3262, 3171, 3082,
-		2993, 2907, 2822, 2739, 2657, 2578, 2500, 2424, 2350, 2277, 2207, 2139,
-		2072, 2007, 1945, 1884, 1825, 1768, 1713, 1660, 1609, 1559, 1511, 1465,
-		1420, 1377, 1336, 1296, 1258, 1221, 1186, 1152, 1120, 1089, 1059, 1030,
-		1002, 976, 951, 927, 904, 881, 860, 840, 821, 802, 784, 767, 751, 736,
-		721, 707, 694, 681, 669, 657, 646, 635, 625, 615, 606, 597, 589, 581,
-		573, 566, 559, 553, 546, 540, 535, 529, 524, 519, 514, 510, 506, 502,
-		498, 494, 491, 487, 484, 481, 478, 476 };
+//42低速
+//static uint32_t period_LO[202] = { 8438, 8387, 8384, 8381, 8379, 8376, 8372,
+//		8369, 8366, 8362, 8358, 8354, 8350, 8345, 8341, 8336, 8331, 8325, 8320,
+//		8314, 8307, 8301, 8294, 8287, 8279, 8271, 8263, 8254, 8245, 8236, 8225,
+//		8215, 8204, 8192, 8180, 8167, 8154, 8140, 8125, 8110, 8094, 8077, 8060,
+//		8041, 8022, 8002, 7981, 7959, 7936, 7912, 7888, 7861, 7834, 7806, 7776,
+//		7746, 7713, 7680, 7645, 7609, 7571, 7532, 7492, 7449, 7406, 7360, 7313,
+//		7265, 7214, 7162, 7108, 7052, 6995, 6935, 6874, 6811, 6746, 6680, 6611,
+//		6541, 6469, 6395, 6320, 6243, 6164, 6083, 6001, 5918, 5833, 5747, 5659,
+//		5571, 5481, 5390, 5298, 5206, 5113, 5019, 4925, 4830, 4736, 4641, 4546,
+//		4451, 4356, 4262, 4168, 4075, 3983, 3891, 3800, 3711, 3622, 3535, 3448,
+//		3363, 3280, 3198, 3118, 3039, 2962, 2886, 2812, 2740, 2670, 2602, 2535,
+//		2470, 2407, 2346, 2287, 2229, 2173, 2119, 2067, 2017, 1968, 1921, 1876,
+//		1832, 1790, 1749, 1710, 1672, 1636, 1601, 1568, 1536, 1505, 1475, 1447,
+//		1420, 1394, 1369, 1345, 1322, 1300, 1279, 1259, 1240, 1221, 1204, 1187,
+//		1171, 1156, 1141, 1127, 1114, 1101, 1089, 1077, 1066, 1056, 1046, 1036,
+//		1027, 1018, 1010, 1002, 994, 987, 980, 974, 968, 962, 956, 951, 945,
+//		941, 936, 931, 927, 923, 919, 916, 912, 909, 906, 903, 900, 897, 895 };
+//57低速
+static uint32_t period_LO[202] = { 8438, 8390, 8388, 8386, 8383, 8380, 8377,
+		8374, 8371, 8368, 8364, 8360, 8356, 8352, 8348, 8343, 8339, 8334, 8328,
+		8323, 8317, 8311, 8305, 8298, 8291, 8284, 8276, 8268, 8259, 8250, 8241,
+		8231, 8221, 8210, 8199, 8187, 8175, 8162, 8149, 8134, 8120, 8104, 8088,
+		8071, 8053, 8034, 8015, 7995, 7974, 7951, 7928, 7904, 7879, 7853, 7825,
+		7797, 7767, 7736, 7704, 7670, 7636, 7599, 7562, 7523, 7482, 7440, 7397,
+		7351, 7305, 7256, 7206, 7155, 7102, 7047, 6990, 6932, 6872, 6810, 6747,
+		6682, 6615, 6547, 6477, 6405, 6332, 6258, 6182, 6104, 6026, 5946, 5865,
+		5783, 5700, 5616, 5531, 5445, 5359, 5272, 5185, 5098, 5010, 4922, 4834,
+		4746, 4659, 4571, 4485, 4398, 4313, 4228, 4144, 4061, 3979, 3898, 3818,
+		3739, 3662, 3586, 3512, 3439, 3367, 3297, 3229, 3162, 3097, 3034, 2972,
+		2912, 2854, 2797, 2742, 2689, 2637, 2587, 2539, 2492, 2447, 2404, 2362,
+		2321, 2282, 2244, 2208, 2173, 2140, 2108, 2077, 2047, 2018, 1991, 1965,
+		1940, 1915, 1892, 1870, 1849, 1829, 1809, 1791, 1773, 1756, 1740, 1724,
+		1709, 1695, 1682, 1669, 1656, 1645, 1633, 1623, 1612, 1603, 1593, 1584,
+		1576, 1568, 1560, 1553, 1546, 1539, 1533, 1527, 1521, 1515, 1510, 1505,
+		1500, 1496, 1492, 1487, 1484, 1480, 1476, 1473, 1470, 1467, 1464, 1461,
+		1458, 1456, 1453 };
+//42高速
+//static uint32_t period_HI[202] = { 8438, 8387, 8384, 8381, 8379, 8376, 8372,
+//		8369, 8366, 8362, 8358, 8354, 8350, 8345, 8341, 8336, 8331, 8325, 8320,
+//		8314, 8307, 8301, 8294, 8287, 8279, 8271, 8263, 8254, 8245, 8236, 8225,
+//		8215, 8204, 8192, 8180, 8167, 8154, 8140, 8125, 8110, 8094, 8077, 8060,
+//		8041, 8022, 8002, 7981, 7959, 7936, 7912, 7888, 7861, 7834, 7806, 7776,
+//		7746, 7713, 7680, 7645, 7609, 7571, 7532, 7492, 7449, 7406, 7360, 7313,
+//		7265, 7214, 7162, 7108, 7052, 6995, 6935, 6874, 6811, 6746, 6680, 6611,
+//		6541, 6469, 6395, 6320, 6243, 6164, 6083, 6001, 5918, 5833, 5747, 5659,
+//		5571, 5481, 5390, 5298, 5206, 5113, 5019, 4925, 4830, 4736, 4641, 4546,
+//		4451, 4356, 4262, 4168, 4075, 3983, 3891, 3800, 3711, 3622, 3535, 3448,
+//		3363, 3280, 3198, 3118, 3039, 2962, 2886, 2812, 2740, 2670, 2602, 2535,
+//		2470, 2407, 2346, 2287, 2229, 2173, 2119, 2067, 2017, 1968, 1921, 1876,
+//		1832, 1790, 1749, 1710, 1672, 1636, 1601, 1568, 1536, 1505, 1475, 1447,
+//		1420, 1394, 1369, 1345, 1322, 1300, 1279, 1259, 1240, 1221, 1204, 1187,
+//		1171, 1156, 1141, 1127, 1114, 1101, 1089, 1077, 1066, 1056, 1046, 1036,
+//		1027, 1018, 1010, 1002, 994, 987, 980, 974, 968, 962, 956, 951, 945,
+//		941, 936, 931, 927, 923, 919, 916, 912, 909, 906, 903, 900, 897, 895 };
+//57高速
+static uint32_t period_HI[202] = { 8438, 8383, 8380, 8377, 8374, 8371, 8368,
+		8364, 8360, 8356, 8352, 8348, 8343, 8339, 8334, 8328, 8323, 8317, 8311,
+		8305, 8298, 8291, 8283, 8276, 8268, 8259, 8250, 8241, 8231, 8221, 8210,
+		8198, 8187, 8174, 8161, 8147, 8133, 8118, 8102, 8086, 8069, 8051, 8032,
+		8012, 7992, 7970, 7947, 7924, 7899, 7874, 7847, 7819, 7790, 7759, 7727,
+		7694, 7660, 7624, 7587, 7548, 7507, 7465, 7422, 7376, 7329, 7281, 7230,
+		7178, 7123, 7067, 7009, 6950, 6888, 6824, 6758, 6691, 6621, 6550, 6476,
+		6401, 6323, 6244, 6163, 6080, 5995, 5909, 5821, 5731, 5640, 5547, 5453,
+		5358, 5262, 5164, 5066, 4967, 4867, 4766, 4665, 4563, 4461, 4359, 4257,
+		4156, 4054, 3953, 3852, 3752, 3653, 3554, 3457, 3361, 3265, 3171, 3079,
+		2988, 2898, 2810, 2723, 2639, 2556, 2475, 2396, 2318, 2243, 2169, 2098,
+		2028, 1960, 1895, 1831, 1769, 1709, 1651, 1595, 1541, 1489, 1438, 1389,
+		1342, 1297, 1253, 1211, 1171, 1132, 1095, 1059, 1024, 991, 960, 929,
+		900, 872, 845, 819, 795, 771, 749, 727, 707, 687, 668, 650, 633, 616,
+		601, 586, 571, 558, 545, 532, 520, 509, 498, 488, 478, 469, 460, 451,
+		443, 435, 428, 421, 414, 408, 402, 396, 390, 385, 380, 375, 371, 367,
+		362, 358, 355, 351, 348, 345, 342, 339, 336 };
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -262,14 +321,12 @@ int main(void) {
 	PWM4Step = 10;
 	PWM5Step = 10;
 	PWM6Step = 10;
-	TransferLED1_OUT(0);
-	TransferLED2_OUT(0);
-	TransferLED3_OUT(0);
-	TransferLED4_OUT(0);
-	TransferLED5_OUT(0);
-	TransferLED6_OUT(0);
+
 	/* 初始化串口接收 */
 	HAL_UART_Receive_IT(&huart2, RxBuffer, 6);
+
+	TransferRELAY1_OUT(0);
+
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -335,18 +392,36 @@ void SystemClock_Config(void) {
 /* USER CODE BEGIN 4 */
 /* 6路PWM输出函数 */
 void OutPWM1(uint32_t Step, uint8_t Dir) {
-	uint32_t PWMHoldTime = period1[0];
+	uint32_t PWMHoldTime = period_HI[0];
 	uint32_t OldStep = Step;
 	PWM1_DIR(Dir);
 	PWM1_EN(0);
 	for (; Step > 0; Step--) {
+		if (limitZMax == 0 && Dir == 1) {
+			Step = 0;
+			if (currentStatus == WORKING) {
+				lastStatus = currentStatus;
+				currentStatus = EMCSTOP;
+				EMCSTOPBuffer[0] = 91;
+			}
+			break;
+		}
+		if (limitZMin == 0 && Dir == 0) {
+			Step = 0;
+			if (currentStatus == WORKING) {
+				lastStatus = currentStatus;
+				currentStatus = EMCSTOP;
+				EMCSTOPBuffer[0] = 92;
+			}
+			break;
+		}
 		//S加速
 		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
-			PWMHoldTime = period1[OldStep - Step];
+			PWMHoldTime = period_HI[OldStep - Step];
 		}
 		//S减速
 		if (Step <= 200 && (Step < (OldStep / 2))) {
-			PWMHoldTime = period1[Step];
+			PWMHoldTime = period_HI[Step];
 		}
 		PWM1_OUT(1);
 		for (iTime = 0; iTime < 5; iTime++)
@@ -354,22 +429,44 @@ void OutPWM1(uint32_t Step, uint8_t Dir) {
 		PWM1_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
+		if (currentStatus == EMCSTOP) {
+			Step = 0;
+			break;
+		}
 	}
 	PWM1_EN(1);
 }
 void OutPWM2(uint32_t Step, uint8_t Dir) {
-	uint32_t PWMHoldTime = period1[0];
+	uint32_t PWMHoldTime = period_HI[0];
 	uint32_t OldStep = Step;
 	PWM2_DIR(Dir);
 	PWM2_EN(0);
 	for (; Step > 0; Step--) {
+		if (limitYMin == 0 && Dir == 1) {
+			Step = 0;
+			if (currentStatus == WORKING) {
+				lastStatus = currentStatus;
+				currentStatus = EMCSTOP;
+				EMCSTOPBuffer[0] = 93;
+			}
+			break;
+		}
+		if (limitYMax == 0 && Dir == 0) {
+			Step = 0;
+			if (currentStatus == WORKING) {
+				lastStatus = currentStatus;
+				currentStatus = EMCSTOP;
+				EMCSTOPBuffer[0] = 94;
+			}
+			break;
+		}
 		//S加速
 		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
-			PWMHoldTime = period1[OldStep - Step];
+			PWMHoldTime = period_HI[OldStep - Step];
 		}
 		//S减速
 		if (Step <= 200 && (Step < (OldStep / 2))) {
-			PWMHoldTime = period1[Step];
+			PWMHoldTime = period_HI[Step];
 		}
 		PWM2_OUT(1);
 		for (iTime = 0; iTime < 5; iTime++)
@@ -377,45 +474,53 @@ void OutPWM2(uint32_t Step, uint8_t Dir) {
 		PWM2_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
+		if (currentStatus == EMCSTOP) {
+			break;
+			Step = 0;
+		}
 	}
 	PWM2_EN(1);
 }
+/* 旋转伺服步进电机 */
 void OutPWM3(uint32_t Step, uint8_t Dir) {
-	uint32_t PWMHoldTime = period[0];
+	uint32_t PWMHoldTime = period_HI[0];
 	uint32_t OldStep = Step;
 	PWM3_DIR(Dir);
 	PWM3_EN(0);
 	for (; Step > 0; Step--) {
 		//S加速
-		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
-			PWMHoldTime = period[OldStep - Step];
+		if ((OldStep - Step) < 100 && (Step > (OldStep / 2))) {
+			PWMHoldTime = period_HI[100 + OldStep - Step];
 		}
 		//S减速
-		if (Step <= 200 && (Step < (OldStep / 2))) {
-			PWMHoldTime = period[Step];
+		if (Step <= 100 && (Step < (OldStep / 2))) {
+			PWMHoldTime = period_HI[100 + Step];
 		}
 		PWM3_OUT(1);
-		for (iTime = 0; iTime < 5; iTime++)
+		for (iTime = 0; iTime < 60; iTime++)
 			;
 		PWM3_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
+		if (currentStatus == EMCSTOP) {
+			Step = 0;
+		}
 	}
 	PWM3_EN(1);
 }
 void OutPWM4(uint32_t Step, uint8_t Dir) {
-	uint32_t PWMHoldTime = period[0];
+	uint32_t PWMHoldTime = period_LO[0];
 	uint32_t OldStep = Step;
 	PWM4_DIR(Dir);
 	PWM4_EN(0);
 	for (; Step > 0; Step--) {
 		//S加速
 		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
-			PWMHoldTime = period[OldStep - Step];
+			PWMHoldTime = period_LO[OldStep - Step];
 		}
 		//S减速
 		if (Step <= 200 && (Step < (OldStep / 2))) {
-			PWMHoldTime = period[Step];
+			PWMHoldTime = period_LO[Step];
 		}
 		PWM4_OUT(1);
 		for (iTime = 0; iTime < 5; iTime++)
@@ -423,45 +528,66 @@ void OutPWM4(uint32_t Step, uint8_t Dir) {
 		PWM4_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
+		if (currentStatus == EMCSTOP) {
+			Step = 0;
+		}
 	}
 	PWM4_EN(1);
 }
 void OutPWM5(uint32_t Step, uint8_t Dir) {
-	uint32_t PWMHoldTime = period[0];
+	uint32_t PWMHoldTime = period_HI[0];
 	uint32_t OldStep = Step;
 	PWM5_DIR(Dir);
 	PWM5_EN(0);
 	for (; Step > 0; Step--) {
 		//S加速
 		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
-			PWMHoldTime = period[OldStep - Step];
+			PWMHoldTime = period_HI[OldStep - Step];
 		}
 		//S减速
 		if (Step <= 200 && (Step < (OldStep / 2))) {
-			PWMHoldTime = period[Step];
+			PWMHoldTime = period_HI[Step];
 		}
 		PWM5_OUT(1);
-		for (iTime = 0; iTime < 5; iTime++)
+		for (iTime = 0; iTime < 476; iTime++)
 			;
 		PWM5_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
+		if (currentStatus == EMCSTOP) {
+			Step = 0;
+		}
 	}
 	PWM5_EN(1);
+	/* 测试伺服步进电机高速起停 */
+//	PWM5_DIR(Dir);
+//	PWM5_EN(0);
+//	for (; Step > 0; Step--) {
+//		PWM5_OUT(1);
+//		for (iTime = 0; iTime < 476; iTime++)
+//			;
+//		PWM5_OUT(0);
+//		for (iTime = 0; iTime < 476; iTime++)
+//			;
+//		if (currentStatus == EMCSTOP) {
+//			Step = 0;
+//		}
+//	}
+//	PWM5_EN(1);
 }
 void OutPWM6(uint32_t Step, uint8_t Dir) {
-	uint32_t PWMHoldTime = period[0];
+	uint32_t PWMHoldTime = period_LO[0];
 	uint32_t OldStep = Step;
 	PWM6_DIR(Dir);
 	PWM6_EN(0);
 	for (; Step > 0; Step--) {
 		//S加速
 		if ((OldStep - Step) < 200 && (Step > (OldStep / 2))) {
-			PWMHoldTime = period[OldStep - Step];
+			PWMHoldTime = period_LO[OldStep - Step];
 		}
 		//S减速
 		if (Step <= 200 && (Step < (OldStep / 2))) {
-			PWMHoldTime = period[Step];
+			PWMHoldTime = period_LO[Step];
 		}
 		PWM6_OUT(1);
 		for (iTime = 0; iTime < 5; iTime++)
@@ -469,6 +595,9 @@ void OutPWM6(uint32_t Step, uint8_t Dir) {
 		PWM6_OUT(0);
 		for (iTime = 0; iTime < PWMHoldTime; iTime++)
 			;
+		if (currentStatus == EMCSTOP) {
+			Step = 0;
+		}
 	}
 	PWM6_EN(1);
 }
@@ -479,6 +608,18 @@ void OutPWM6(uint32_t Step, uint8_t Dir) {
  * 说    明: 无
  */
 void CMDProcess(void) {
+	if (currentStatus == EMCSTOP) {
+		unsigned short CRCCal = CRC16(&EMCSTOPBuffer[0], 4);
+		memset(CMDBuffer, 0, sizeof(CMDBuffer));
+		CMDRevNum = 0;
+		CMDRunNum = 0;
+		lastStatus = currentStatus;
+		currentStatus = MANUAL;
+		EMCSTOPBuffer[4] = (CRCCal & 0xFF00) >> 8;
+		EMCSTOPBuffer[5] = (CRCCal & 0xFF);
+		HAL_UART_Transmit(&huart2, EMCSTOPBuffer, 6, 0xFFFF);
+		EMCSTOPBuffer[0] = 0;
+	}
 	if (CMDBuffer[CMDRunNum][0] != 0) {
 		switch (CMDBuffer[CMDRunNum][0]) {
 		case 1:
@@ -504,6 +645,14 @@ void CMDProcess(void) {
 		case 6:
 			OutPWM6((CMDBuffer[CMDRunNum][1] << 8) + CMDBuffer[CMDRunNum][2],
 					CMDBuffer[CMDRunNum][3]);
+			break;
+		case 80:
+			lastStatus = currentStatus;
+			currentStatus = MANUAL;
+			break;
+		case 81:
+			lastStatus = currentStatus;
+			currentStatus = WORKING;
 			break;
 		default:
 			break;
@@ -546,23 +695,25 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef* uartHandle) {
 	/* 判断CRC校验 */
 	if ((RxBuffer[4] == ((CRCCal & 0xFF00) >> 8))
 			&& (RxBuffer[5] == (CRCCal & 0xFF))) {
-		/* 命令缓存达到最大值, 重新循环 */
-		if (CMDRevNum > MAX_CMD_SIZE)
-			CMDRevNum = 0;
-		/* 缓存命令 */
-		CMDBuffer[CMDRevNum][0] = RxBuffer[0];
-		CMDBuffer[CMDRevNum][1] = RxBuffer[1];
-		CMDBuffer[CMDRevNum][2] = RxBuffer[2];
-		CMDBuffer[CMDRevNum][3] = RxBuffer[3];
-		CMDRevNum++;
-		/* 处理特殊命令: 暂未定义 */
-		if (RxBuffer[0] == 99) {
-			memset(CMDBuffer, 0, sizeof(CMDBuffer));
-			CMDRevNum = 0;
-			CMDRunNum = 0;
+		if (RxBuffer[0] < 90) {
+			/* 缓存命令 */
+			CMDBuffer[CMDRevNum][0] = RxBuffer[0];
+			CMDBuffer[CMDRevNum][1] = RxBuffer[1];
+			CMDBuffer[CMDRevNum][2] = RxBuffer[2];
+			CMDBuffer[CMDRevNum][3] = RxBuffer[3];
+			CMDRevNum++;
 		}
-
-//		HAL_UART_Transmit(&huart2, RxBuffer, 6, 0xFFFF);
+		/* 命令缓存达到最大值, 重新循环 */
+		if (CMDRevNum == MAX_CMD_SIZE)
+			CMDRevNum = 0;
+		/* 处理特殊命令: 停止 */
+		if (RxBuffer[0] == 99) {
+			lastStatus = currentStatus;
+			currentStatus = EMCSTOP;
+			EMCSTOPBuffer[0] = 99;
+		}
+		//测试用
+		//HAL_UART_Transmit(&huart2, RxBuffer, 6, 0xFFFF);
 
 		/* 清除接收缓存 */
 		memset(RxBuffer, 0, 6);
